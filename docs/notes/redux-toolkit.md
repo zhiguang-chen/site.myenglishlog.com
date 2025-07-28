@@ -1,28 +1,25 @@
 ---
-title: Redux notes
+title: Redux Toolkit(RTK)
 author: JumpToMars
-tags: React | Redux
+tags: Frontend | React
 created: 2025-07-28
 updated: 2025-07-28
 ---
 
-## Create React js project
+## Overview
 
-### Create a project
+- RTK is a wrapper around the **core Redux**, an approach for writing Redux
+  logic.
+- RTK automatically configure the Redux DevTools extension.
+- You should be always using RTK to write any Redux logic today!
+
+## Some preparation
+
+### Create project and add dependencies
 
 ```
 npm create vite@latest
-```
-
-From templates:
-
-```
-# Vite with our Redux+TS template
-# (using the `degit` tool to clone and extract the template)
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
-
-# Next.js using the `with-redux` template
-npx create-next-app --example with-redux my-app
+npm install @reduxjs/toolkit react-redux
 ```
 
 ### set up msw
@@ -31,11 +28,143 @@ npx create-next-app --example with-redux my-app
 npx msw init public/ --save
 ```
 
-### Run ts code directly
+More on: <https://mswjs.io/>
 
+## Simple example
+
+### Redux Store
+
+```ts
+// app/store.ts
+import { configureStore } from '@reduxjs/toolkit';
+import counterReducer from '../features/counter/counterSlice';
+
+// Create a Redux store
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+  },
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 ```
-npx tsx app/store.ts
+
+### Provide the Redux Store to React
+
+```ts
+// main.tsx
+import { store } from './app/store';
+import { Provider } from 'react-redux';
+
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 ```
+
+### Redux State Slice
+
+Note that Redux requires us not to mutate state, but RTK's `createSlice` and
+`createReducer` APIs use `Immer` internally to allow us to "mutate" state(it
+creates copies under the hood).
+
+```ts
+// features/counter/counterSlice.ts
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+
+export interface CounterState {
+  value: number;
+}
+
+const initialState: CounterState = {
+  value: 0,
+};
+
+export const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+    decrement: (state) => {
+      state.value -= 1;
+    },
+    incrementByAmount: (state, action: PayloadAction<number>) => {
+      state.value += action.payload;
+    },
+  },
+});
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+
+export default counterSlice.reducer;
+```
+
+We can also export something else from slice files, such as selectors:
+
+```ts
+export const selectCount = (state: RootState) => state.counter.value;
+```
+
+In some cases, we can caste the initial state by using `as`, see: \
+<https://redux-toolkit.js.org/tutorials/typescript#define-slice-state-and-action-types>
+
+### Dispatch actions
+
+```ts
+// features/counter/Counter.ts
+import React from 'react';
+import type { RootState } from '../../app/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { decrement, increment } from './counterSlice';
+
+export function Counter() {
+  const count = useSelector((state: RootState) => state.counter.value);
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <div>
+        <button
+          aria-label="Increment value"
+          onClick={() => dispatch(increment())}
+        >
+          Increment
+        </button>
+        <span>{count}</span>
+        <button
+          aria-label="Decrement value"
+          onClick={() => dispatch(decrement())}
+        >
+          Decrement
+        </button>
+      </div>
+    </div>
+  );
+}
+```
+
+### Good to have: Define Typed Hooks
+
+So we do not have to import the `RootState` and `AppDispatch` types into each
+component.
+
+```ts
+// app/hooks.ts
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState, AppDispatch } from './store';
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
+```
+
+## RTK Query
+
+////////////////////
 
 ## Redux Terminology
 
@@ -105,12 +234,12 @@ console.log(finalResult);
 
 ### extraReducers
 
-Use extraReducers to handle actions that were defined outside of the slice.
+Use `extraReducers` to handle actions that were defined outside of the slice.
 
 ### Store
 
-A **store** is where the state lives. It is created by passing a **reducer**.
-Use `store.getState()` to get the current state value.
+A **store** is where the state lives. It is created by passing a `reducer` We
+can use `store.getState()` to get the current state value.
 
 ### Dispatch
 
@@ -154,8 +283,8 @@ await store.dispatch(incrementAsync(6));
 
 which means:
 
-- We only have one copy of each particular piece of data in our state, so
-  there's no duplication
+- Only have one copy of each particular piece of data in our state, so there's
+  no duplication
 - Data that has been normalized is kept in a lookup table, where the item IDs
   are the keys, and the items themselves are the values. This is typically just
   a plain JS object.
@@ -287,14 +416,21 @@ stored rather than deduplicating results across endpoints or requests.
 
 ## references
 
-- https://mswjs.io/
-
 ## TODO
 
 - learn react-router
 - `Object.entries`, `Object.values`
 - learn
-  https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#customizing-queries-with-basequery
-- learn https://api.reactrouter.com/v7/types/react_router.LoaderFunction.html
-  https://github.com/reduxjs/redux-toolkit/discussions/2751
+  <https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#customizing-queries-with-basequery>
+- learn <https://api.reactrouter.com/v7/types/react_router.LoaderFunction.html>
+  <https://github.com/reduxjs/redux-toolkit/discussions/2751>
 - Some other data fetching packages
+
+### What is this `satisfies`
+
+```ts
+// Workaround: cast state instead of declaring variable type
+const initialState = {
+  value: 0,
+} satisfies CounterState as CounterState;
+```
