@@ -5,7 +5,7 @@ import parseWithMetadata from '@/helpers/parseWithMetadata';
 import Link from 'next/link';
 
 function getGroupedBlogPosts() {
-  const postsDir = path.join(process.cwd(), 'docs/blog');
+  const postsDir = path.join(process.cwd(), 'docs/notes');
   const files = fs.readdirSync(postsDir).filter((f) => f.endsWith('.md'));
 
   const list = files.map((file) => {
@@ -48,6 +48,10 @@ export default function Home() {
     return (
       <div className="container p-5 lg:p-10">
         <h1 className="text-3xl mb-10">Next stop: Mars.</h1>
+        <p className="text-sm text-gray-500 italic mb-6">
+          ⚠️ These are just my personal notes while learning. They may be
+          incomplete, outdated, or inaccurate. Use at your own risk.
+        </p>
 
         {tags.map((tag) => (
           <div key={tag} className="mb-8">
@@ -57,7 +61,10 @@ export default function Home() {
             <ul className="list-disc list-outside ml-5">
               {grouped[tag].map((post) => (
                 <li key={post.slug} className="mb-2">
-                  <Link href={`/blog/${post.slug}`} className="hover:underline">
+                  <Link
+                    href={`/notes/${post.slug}`}
+                    className="hover:underline"
+                  >
                     {post.title}
                   </Link>
                   <span className="ml-3 text-sm text-gray-500">

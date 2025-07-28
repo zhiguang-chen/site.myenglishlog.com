@@ -13,7 +13,7 @@ export default async function BlogArticlePage({ params }: Props) {
 
   try {
     const mdString = await fs.readFile(
-      process.cwd() + `/docs/blog/${slug}.md`,
+      process.cwd() + `/docs/notes/${slug}.md`,
       'utf8'
     );
 
