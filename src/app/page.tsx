@@ -26,7 +26,7 @@ function getGroupedBlogPosts() {
     };
   });
 
-  list.sort((a, b) => b.updated.localeCompare(a.created));
+  list.sort((a, b) => b.updated.localeCompare(a.updated));
 
   const grouped: Record<string, typeof list> = {};
 
@@ -47,7 +47,7 @@ export default function Home() {
 
     return (
       <div className="container p-5 lg:p-10">
-        <h1 className="text-3xl mb-10">Next stop: Mars.</h1>
+        <h1 className="text-3xl mb-10">My English Log</h1>
         <p className="text-sm text-gray-500 italic mb-6">
           ⚠️ These are just my personal notes while learning. They may be
           incomplete, outdated, or inaccurate. Use at your own risk.

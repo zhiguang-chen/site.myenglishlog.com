@@ -18,22 +18,19 @@ export default async function BlogArticlePage({ params }: Props) {
     );
 
     const { metadata, content } = parseWithMetadata(mdString);
-    const { title, author, created, updated } = metadata;
+    const { title, created, updated } = metadata;
     const md = markdownit();
 
     return (
       <div className="container p-5 lg:p-10">
         <div className="mb-5">
           <Link href="/" className="text-sm text-blue-500 hover:underline">
-            ← Back to Base
+            ← Back home
           </Link>
         </div>
         <h1 className="font-semibold mb-4 text-2xl sm:text-3xl">{title}</h1>
         <div className="mb-3 text-sm text-gray-500 leading-relaxed sm:mb-5 lg:mb-8">
-          Author: {author} <br />
-          Created: {created}
-          <br />
-          Updated: {updated}
+          Created: {created} | Updated: {updated}
         </div>
         <div
           className="prose prose-slate max-w-4xl"
