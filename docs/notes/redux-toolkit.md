@@ -1,6 +1,6 @@
 ---
 title: Redux Toolkit(RTK)
-author: JumpToMars
+author: MyEnglishLog
 tags: Frontend | React
 created: 2025-07-28
 updated: 2025-07-29

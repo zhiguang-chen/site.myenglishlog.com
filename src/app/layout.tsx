@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Jump to Mars',
-  description: 'Next stop: Mars.',
+  title: 'My English Log',
+  description: 'My notes English',
 };
 
 export default function RootLayout({

@@ -1,6 +1,6 @@
 ---
 title: Redux
-author: JumpToMars
+author: MyEnglishLog
 tags: Frontend | React
 created: 2025-07-29
 updated: 2025-07-29
