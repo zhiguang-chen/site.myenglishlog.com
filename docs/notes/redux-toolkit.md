@@ -3,7 +3,7 @@ title: Redux Toolkit(RTK)
 author: JumpToMars
 tags: Frontend | React
 created: 2025-07-28
-updated: 2025-07-28
+updated: 2025-07-29
 ---
 
 ## Overview
@@ -11,11 +11,11 @@ updated: 2025-07-28
 - RTK is a wrapper around the **core Redux**, an approach for writing Redux
   logic.
 - RTK automatically configure the Redux DevTools extension.
-- You should be always using RTK to write any Redux logic today!
+- RTK is the **standard** way to write Redux logic.
 
-## Some preparation
+## Preparation
 
-### Create project and add dependencies
+### Create a React project, add Redux dependencies
 
 ```
 npm create vite@latest
@@ -162,75 +162,17 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
 ```
 
+## Terminology
+
+### Slices
+
+A collection of Redux reducer logic and actions for a single feature of an app,
+typically defined together in a single file. The name comes from splitting up
+the root Redux state object into multiple "slices" of state.
+
 ## RTK Query
 
-////////////////////
-
-## Redux Terminology
-
-### Action
-
-An **action** is a plain JavaScript object that has a type field. You can think
-of an action as an event that describes something that happened in the
-application. The type field is a descriptive name like `domain/eventName`
-
-The additional information should be put in a field called **payload**
-
-_Redux **actions** and **state** should only contain plain JS values like
-**objects**, **arrays**, and **primitives**. Don't put class instances,
-functions, **Date/Map/Set** instances, or other **non-serializable** values into
-Redux!._
-
-We should see an action as **"an event that occurred in the app"**, rather than
-**"a command to set a value"**.
-
-### Action Creator
-
-Just a function returns an action object
-
-### Reducers
-
-A reducer is a function that receives the **current state** and an **action**,
-and returns a **new state**, we can see it as an event listener.
-
-Reducers can have any kind of logic inside to decide the new state, all state
-update logic should go in a reducer, it can contain as much logic as necessary,
-but it must always follow some specific rules:
-
-- They should only calculate the new state value based on the `state` and
-  `action` arguments.
-- They are not allowed to modify the existing state. Instead, they must make
-  immutable updates, by copying the existing state and making changes to the
-  copied values.
-- They must be "pure" - they cannot do any asynchronous logic, calculate random
-  values, or cause other "side effects"
-
-It is called reducer because it works similar to `Array.reduce`
-
-```ts
-const actions = [
-  { type: 'counter/increment' },
-  { type: 'counter/increment' },
-  { type: 'counter/increment' },
-];
-
-const initialState = { value: 0 };
-type State = typeof initialState;
-type Action = (typeof actions)[0];
-
-const counterReducer = (state: State, action: Action) => {
-  if (action.type === 'counter/increment') {
-    return {
-      value: state.value + 1,
-    };
-  }
-
-  return state;
-};
-
-const finalResult = actions.reduce(counterReducer, initialState);
-console.log(finalResult);
-```
+## Others
 
 ### extraReducers
 
@@ -238,28 +180,13 @@ Use `extraReducers` to handle actions that were defined outside of the slice.
 
 ### Store
 
-A **store** is where the state lives. It is created by passing a `reducer` We
-can use `store.getState()` to get the current state value.
-
 ### Dispatch
-
-It is the only way to update the state, by calling `store.dispatch()` and pass
-in an `action` object, and the store will run its reducer. We can see
-dispatching actions as **triggering an event**, and the reducer acts as an event
-listener.
 
 ### Selectors
 
-- Selectors are fucntions accept `(state: RootState)` as their argument and
-  either return a value from the state, or derive a new value.
 - Any time an action has been dispatched and the Redux store has been updated,
   useSelector will re-run the selector function.
 - Selectors can be written in slice files, or inline in the `useSelector` hook.
-
-### Slices
-
-A **slice** is a collection of Redux reducer logic and actions for a single
-feature of an app.
 
 ### Thunks
 
@@ -310,10 +237,6 @@ For example:
 The returned object contains:
 
 - a set of generated reducer functions, such as `.setAll`
-
-## Redux Toolkit
-
-Redux Toolkit is the standard way to write Redux logic
 
 ## Some other
 
