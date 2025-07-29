@@ -132,6 +132,39 @@ const finalResult = actions.reduce(counterReducer, initialState);
 console.log(finalResult);
 ```
 
+#### A Redux store needs to have a single "root reducer" function passed in when it's created
+
+This is how we call all of the slice reducers by hand:
+
+```ts
+function rootReducer(state = {}, action) {
+  return {
+    users: usersReducer(state.users, action),
+    posts: postsReducer(state.posts, action),
+    comments: commentsReducer(state.comments, action),
+  };
+}
+```
+
+But Redux has a function called `combineReducers`:
+
+```ts
+const rootReducer = combineReducers({
+  users: usersReducer,
+  posts: postsReducer,
+  comments: commentsReducer,
+});
+```
+
+While using Redux Toolkit we can also pass a reducer function directly as the
+`reducer` argument:
+
+```ts
+const store = configureStore({
+  reducer: rootReducer,
+});
+```
+
 ### Store
 
 It is where the state lives.
