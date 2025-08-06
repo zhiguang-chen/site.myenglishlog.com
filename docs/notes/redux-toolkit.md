@@ -12,6 +12,20 @@ updated: 2025-07-29
 - RTK automatically configure the Redux DevTools extension.
 - RTK is the **standard** way to write Redux logic.
 
+RTK provide these most commonly used APIs:
+
+- `configureStore`
+- `createSlice`
+- `createAsyncThunk`: abstracts the standard "dispatch actions before/after an
+  async request" pattern
+- `createEntityAdapter`: prebuilt reducers and selectors for CRUD operations on
+  normalized state
+- `createSelector`: a re-export of the standard Reselect API for memoized
+  selectors
+- `createListenerMiddleware`: a side effects middleware for running logic in
+  response to dispatched actions
+- RTK Query
+
 ## Preparation
 
 ### Create a React project, add Redux dependencies
