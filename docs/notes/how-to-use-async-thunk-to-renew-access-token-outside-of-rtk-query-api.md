@@ -25,7 +25,9 @@ import {
 const renewAccessToken = createAsyncThunk(
   'auth/renewAccessToken',
   async (token: string) => {
-    console.log(`Thunk: refreshToken "${token}" is sent to server, waiting...`);
+    console.log(
+      `Thunk: refreshToken "${token}" is being sent to the server, waiting...`
+    );
 
     await new Promise((r) => setTimeout(r, 1000));
 
