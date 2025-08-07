@@ -16,14 +16,8 @@ import {
   type ThunkAction,
 } from '@reduxjs/toolkit';
 
-const delay = (time: number) => {
-  return new Promise((res) => {
-    setTimeout(res, time);
-  });
-};
-
 const counterSlice = createSlice({
-  name: 'couter',
+  name: 'counter',
   initialState: 3,
   reducers: {
     incrementByAmount: (state: number, action: PayloadAction<number>) => {
@@ -49,7 +43,7 @@ type AppThunk<ThunkReturnType = void> = ThunkAction<
 
 const incrementAsync = (amount: number): AppThunk => {
   return async (dispatch) => {
-    await delay(1000);
+    await new Promise((r) => setTimeout(r, 1000));
     dispatch(counterSlice.actions.incrementByAmount(amount));
   };
 };
