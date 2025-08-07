@@ -69,12 +69,14 @@ const baseQueryWithReauth: BaseQueryFn<
 
   if (!accessToken) {
     console.log(
-      'Base Query: I need a new accessToken, dispatch renewAccessToken thunk'
+      'Base Query: I need a new access token, dispatching renewAccessToken thunk'
     );
-    await api.dispatch(renewAccessToken('I-am-an-refreshToken'));
-    console.log('Base Query: Forward the query');
+    await api.dispatch(renewAccessToken('I-am-a-refreshToken'));
+    console.log('Base Query: Forwarding the query');
   } else {
-    console.log('Base Query: I have a valid accessToken, forward the query');
+    console.log(
+      'Base Query: I have a valid access token, forwarding the query'
+    );
   }
 
   const result: QueryReturnValue<
