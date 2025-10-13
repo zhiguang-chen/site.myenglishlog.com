@@ -80,3 +80,18 @@ const incrementAsync = (amount: number): AppThunk<Promise<void>>
 I copied the `AppThunk` type definition from Redux tutorials without trying to
 understand it. It's clear there's a generic type `ThunkReturnType`. It might
 have been more obvious if `T` were used to represent this generic type.
+
+## Another solution
+
+As says in the document: **"A thunk function will always be called with
+`(dispatch, getState)` as its arguments"**, so we can just simply write this
+_thunk action creator_ like this:
+
+```ts
+const incrementAsync2 = (amount: number) => {
+  return async (dispatch: AppDispatch) => {
+    await new Promise((r) => setTimeout(r, 1000));
+    dispatch(counterSlice.actions.incrementByAmount(amount));
+  };
+};
+```

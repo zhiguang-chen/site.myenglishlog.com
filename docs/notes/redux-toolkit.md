@@ -239,6 +239,8 @@ await store.dispatch(incrementAsync(6));
 - Using thunks requires that the `redux-thunk` middleware (a type of plugin for
   Redux) be added to the Redux store when it's created. Redux Toolkit's
   `configureStore` already sets it up automatically.
+- Using thunks as a standard approach for writing async logic with Redux is
+  recommended.
 
 **Thunks are written using two functions:**
 
@@ -326,7 +328,7 @@ export const counterSlice = createSlice({
 
 ### extraReducers
 
-Use `extraReducers` to handle actions that were defined outside of the slice.
+**Use `extraReducers` to handle actions that were defined outside of the slice**
 
 ### Normalized state
 

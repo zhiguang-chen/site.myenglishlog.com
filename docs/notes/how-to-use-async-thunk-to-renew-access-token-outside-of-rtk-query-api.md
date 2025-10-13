@@ -58,7 +58,7 @@ const authSlice = createSlice({
 
 // =============
 // apiSlice
-const baseQueryWithReauth: BaseQueryFn<
+const baseQueryWithAuth: BaseQueryFn<
   FetchArgs,
   unknown,
   FetchBaseQueryError,
@@ -92,7 +92,7 @@ const baseQueryWithReauth: BaseQueryFn<
 
 const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: baseQueryWithReauth,
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     me: builder.query<void, void>({
       query: () => {
